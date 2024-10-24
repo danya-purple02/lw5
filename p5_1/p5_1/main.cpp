@@ -7,7 +7,7 @@ void main()
 {
 	srand(time(NULL));
 
-	int vertex_amount = 1;
+	int vertex_amount = 1, graph_size = 0;
 	cout << "input graph size: ";
 	cin >> vertex_amount;
 	cout << endl;
@@ -39,4 +39,16 @@ void main()
 		}
 		cout << endl;
 	}
+
+	for (int i = 0; i < vertex_amount; i++)
+	{
+		for (int j = i; j < vertex_amount; j++)
+		{
+			if (G[i][j] == 1)
+			{
+				graph_size++;
+			}
+		}
+	}
+	cout << endl << graph_size << endl;
 }
