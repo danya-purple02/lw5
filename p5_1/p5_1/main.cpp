@@ -3,6 +3,8 @@
 
 using namespace std;
 
+void cout_matrix(int edges, int vertexes, int** G);
+
 void main()
 {
 	srand(time(NULL));
@@ -20,16 +22,8 @@ void main()
 		vertexes_degrees[z] = 0;
 	}
 
-	cout << "    ";
-	for (int i = 1; i <= vertex_amount; i++) 
-	{
-		cout << i << " ";
-	}
-	cout << endl << endl;
-
 	for (int i = 0; i < vertex_amount; i++)
 	{
-		cout << i+1 << "   ";
 		for (int j = 0; j < vertex_amount; j++)
 		{
 			if (j < i) 
@@ -40,10 +34,10 @@ void main()
 			{
 				G[i][j] = rand() % 2;
 			}
-			cout << G[i][j] << " ";
 		}
-		cout << endl;
 	}
+	
+	cout_matrix(vertex_amount, vertex_amount, G);
 
 	for (int i = 0; i < vertex_amount; i++)
 	{
@@ -59,7 +53,7 @@ void main()
 			}
 		}
 	}
-	cout << endl << graph_size << endl;
+	cout << endl << "graph size = " << graph_size << endl;
 
 	for (int i = 0; i < vertex_amount; i++)
 	{
@@ -94,5 +88,74 @@ void main()
 	if (dom_vertex != 0) 
 	{
 		cout << "dominant vertex is " << dom_vertex << " and it's degree = " << dom_vertex_degree << endl;
+	}
+
+
+	// task 2
+	
+	int edges = 0;
+	for (int i = 0; i < vertex_amount; i++) 
+	{
+		for (int j = i + 1; j < vertex_amount; j++)
+		{
+			if (G[i][j] == 1) 
+			{
+				edges++;
+			}
+		}
+	}
+
+	int** G_in = new int* [vertex_amount];
+	for (int x = 0; x < vertex_amount; x++) 
+	{
+		G_in[x] = new int[edges];
+	}
+
+	for (int i = 0; i < vertex_amount; i++) 
+	{
+		for (int j = 0; j < edges; j++) 
+		{
+			G_in[i][j] = 0;
+		}
+	}
+
+	int z = 1, f = 0;
+	for (int i = 0; i < vertex_amount; i++)
+	{
+		for (int j = z; j < vertex_amount; j++)
+		{
+			if (G[i][j] = 1)
+			{
+				G_in[i][f] = 1;
+				G_in[j][f] = 1;
+				f++;
+			}
+		}
+		z++;
+	}
+
+	cout_matrix(edges, vertex_amount, G_in);
+
+	delete[]G;
+	delete[]G_in;
+	return;
+}
+
+void cout_matrix(int edges, int vertexes, int** G)
+{
+	cout << endl << "    ";
+	for (int i = 1; i <= edges; i++)
+	{
+		cout << i << " ";
+	}
+	cout << endl << endl;
+	for (int i = 0; i < vertexes; i++)
+	{
+		cout << i + 1 << "   ";
+		for (int j = 0; j < edges; j++)
+		{
+			cout << G[i][j] << " ";
+		}
+		cout << endl;
 	}
 }
