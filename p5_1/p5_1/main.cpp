@@ -96,7 +96,7 @@ void main()
 	int edges = 0;
 	for (int i = 0; i < vertex_amount; i++) 
 	{
-		for (int j = i + 1; j < vertex_amount; j++)
+		for (int j = i; j < vertex_amount; j++)
 		{
 			if (G[i][j] == 1) 
 			{
@@ -119,22 +119,57 @@ void main()
 		}
 	}
 
-	int z = 1, f = 0;
-	for (int i = 0; i < vertex_amount; i++)
+	int m = 0;
+
+	for (int i = 0; i < vertex_amount; i++) 
 	{
-		for (int j = z; j < vertex_amount; j++)
+		for (int j = i; j < edges; j++) 
 		{
-			if (G[i][j] = 1)
+			if (G[i][j] == 1 && i == j)
 			{
-				G_in[i][f] = 1;
-				G_in[j][f] = 1;
-				f++;
+				G_in[i][m] = 1;
+				m++;
+				continue;
+			}
+			else if (G[i][j] == 1 && i != j)
+			{
+				G_in[i][m] = 1;
+				G_in[j][m] = 1;
+				m++;
+				continue;
 			}
 		}
-		z++;
 	}
 
 	cout_matrix(edges, vertex_amount, G_in);
+	
+	int tmp = 0, size = 0;
+	for (int j = 0; j < edges; j++)
+	{
+		for (int i = 0; i < vertex_amount; i++)
+		{
+			if (G_in[i][j] == 1)
+			{
+				tmp++;
+			}
+		}
+		if (tmp == 1) 
+		{
+			size = size + 2;
+		}
+		else if (tmp == 2) 
+		{
+			size++;
+		}
+		tmp = 0;
+	}
+
+	cout << endl << "graph size = " << size << endl;
+
+
+
+
+
 
 	delete[]G;
 	delete[]G_in;
