@@ -8,18 +8,17 @@ void cout_matrix(int edges, int vertexes, int** G);
 void main()
 {
 	srand(time(NULL));
+	int vertex_amount = 1, graph_size = 0, tmp = 0;
 
-	int vertex_amount = 1, graph_size = 0, vertex_number = 0, tmp_flag = 0, dom_vertex = 0, dom_vertex_degree = 0;
+	// t1 p1
+
 	cout << "input graph size: ";
 	cin >> vertex_amount;
-	cout << endl;
 
-	int* vertexes_degrees = new int[vertex_amount];
 	int** G = new int* [vertex_amount];
 	for (int z = 0; z < vertex_amount; z++)
 	{
 		G[z] = new int[vertex_amount];
-		vertexes_degrees[z] = 0;
 	}
 
 	for (int i = 0; i < vertex_amount; i++)
@@ -30,73 +29,65 @@ void main()
 			{
 				G[i][j] = G[j][i];
 			}
-			else 
+			else if (j > i) 
 			{
 				G[i][j] = rand() % 2;
+			}
+			else 
+			{
+				G[i][j] = 0;
 			}
 		}
 	}
 	
 	cout_matrix(vertex_amount, vertex_amount, G);
 
+	// t1 p2
+
 	for (int i = 0; i < vertex_amount; i++)
 	{
-		for (int j = i; j < vertex_amount; j++)
+		for (int j = i + 1; j < vertex_amount; j++)
 		{
 			if (G[i][j] == 1)
 			{
-				if (i == j) 
-				{
-					graph_size++;
-				}
 				graph_size++;
 			}
 		}
 	}
 	cout << endl << "graph size = " << graph_size << endl;
+	
+	// t1 p3
 
 	for (int i = 0; i < vertex_amount; i++)
 	{
 		for (int j = 0; j < vertex_amount; j++)
 		{
-			vertex_number = i + 1;
 			if ((G[i][j] == 1) && (i != j))
 			{
-				tmp_flag++;
+				tmp++;
 			}
 		}
-		if (tmp_flag == 0) 
+		if (tmp == vertex_amount - 1)
 		{
-			cout << vertex_number << " is isolated vertex" << endl;
+			cout << i + 1 << " is dominant vertex" << endl;
 		}
-		else if (tmp_flag == 1) 
+		else if (tmp == 0)
 		{
-			cout << vertex_number << " is terminal vertex" << endl;
+			cout << i + 1 << " vertex is isolated vertex" << endl;
 		}
-		vertexes_degrees[i] = tmp_flag;
-		tmp_flag = 0;
+		else if (tmp == 1)
+		{
+			cout << i + 1 << " vertex is terminal vertex" << endl;
+		}
+		tmp = 0;
 	}
 
-	for (int i = 0; i < vertex_amount; i++) 
-	{
-		if (vertexes_degrees[i] == (vertex_amount - 1)) 
-		{
-			dom_vertex_degree = vertexes_degrees[i];
-			dom_vertex = i + 1;
-		}
-	}
-	if (dom_vertex != 0) 
-	{
-		cout << "dominant vertex is " << dom_vertex << " and it's degree = " << dom_vertex_degree << endl;
-	}
-
-
-	// task 2
+	// t2 p1
 	
 	int edges = 0;
 	for (int i = 0; i < vertex_amount; i++) 
 	{
-		for (int j = i; j < vertex_amount; j++)
+		for (int j = i + 1; j < vertex_amount; j++)
 		{
 			if (G[i][j] == 1) 
 			{
@@ -106,9 +97,9 @@ void main()
 	}
 
 	int** G_in = new int* [vertex_amount];
-	for (int x = 0; x < vertex_amount; x++) 
+	for (int i = 0; i < vertex_amount; i++) 
 	{
-		G_in[x] = new int[edges];
+		G_in[i] = new int[edges];
 	}
 
 	for (int i = 0; i < vertex_amount; i++) 
@@ -123,27 +114,23 @@ void main()
 
 	for (int i = 0; i < vertex_amount; i++) 
 	{
-		for (int j = i; j < edges; j++) 
+		for (int j = i + 1; j < vertex_amount; j++) 
 		{
-			if (G[i][j] == 1 && i == j)
-			{
-				G_in[i][m] = 1;
-				m++;
-				continue;
-			}
-			else if (G[i][j] == 1 && i != j)
+			if (G[i][j] == 1)
 			{
 				G_in[i][m] = 1;
 				G_in[j][m] = 1;
 				m++;
-				continue;
 			}
 		}
 	}
 
 	cout_matrix(edges, vertex_amount, G_in);
 	
-	int tmp = 0, size = 0;
+	// t2 p2
+
+	tmp = 0;
+	graph_size = 0;
 	for (int j = 0; j < edges; j++)
 	{
 		for (int i = 0; i < vertex_amount; i++)
@@ -155,20 +142,43 @@ void main()
 		}
 		if (tmp == 1) 
 		{
-			size = size + 2;
+			graph_size = graph_size + 2;
 		}
 		else if (tmp == 2) 
 		{
-			size++;
+			graph_size++;
 		}
 		tmp = 0;
 	}
 
-	cout << endl << "graph size = " << size << endl;
+	cout << endl << "graph size = " << graph_size << endl;
 
+	// t2 p3
 
-
-
+	for (int i = 0; i < vertex_amount; i++) 
+	{
+		for (int j = 0; j < edges; j++) 
+		{
+			if (G_in[i][j])
+			{
+				tmp++;
+			}
+		}
+		if (tmp == vertex_amount - 1)
+		{
+			cout << i + 1 << " is dominant vertex" << endl;
+		}
+		else if (tmp == 0)
+		{
+			cout << i + 1 << " vertex is isolated vertex" << endl;
+		}
+		else if (tmp == 1)
+		{
+			cout << i + 1 << " vertex is terminal vertex" << endl;
+		}
+		tmp = 0;
+	}
+	
 
 
 	delete[]G;
